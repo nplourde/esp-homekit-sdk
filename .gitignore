@@ -45,3 +45,5 @@ examples/**/managed_components/*
 
 # Dependency lock files
 dependencies.lock
+apps/paradox1738/build/
+apps/paradox1738/managed_components/
