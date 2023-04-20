@@ -211,23 +211,32 @@ static void motionsensor_thread_entry(void *arg)
     {
         hap_char_t *hc_motion_sensor = hap_acc_get_char_by_iid(accessory, motion_sensor_iid);
 
+        paradox1738_event_t event;
+
         while (1)
         {
-            const hap_val_t *cur_val = hap_char_get_val(hc_motion_sensor);
-            //printf("C %" PRId32 " %s\n", hap_char_get_iid(hc_motion_sensor), hap_char_get_type_uuid(hc_motion_sensor));
-
             hap_val_t new_val;
-            if (cur_val->i == 1)
-            {
-                new_val.i = 0;
-            }
-            else
-            {
-                new_val.i = 1;
-            }
             
-            hap_char_update_val(hc_motion_sensor, &new_val);        
-            vTaskDelay(5000 / portTICK_PERIOD_MS);
+            if(paradox1738_event_read(&event))
+            {
+                ESP_LOGI(TAG, "Recv event: %d %d", event.EventId, event.CategoryId);
+            
+                switch(event.EventId)
+                {        
+                    case 0:
+                    new_val.i = 0;
+                    break;
+                    
+                    case 1:
+                    new_val.i = 1;
+                    break;
+
+                    default:
+                    break;
+                }            
+
+                hap_char_update_val(hc_motion_sensor, &new_val);
+            }
         }      
     }
     else
