@@ -4,6 +4,3 @@
 [submodule "components/homekit/json_generator/upstream"]
 	path = components/homekit/json_generator/upstream
 	url = https://github.com/espressif/json_generator.git
-[submodule "esp-idf"]
-	path = esp-idf
-	url = https://github.com/espressif/esp-idf.git
